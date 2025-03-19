@@ -1,0 +1,102 @@
+
+/* Contenedor de la pantalla de carga */
+.loading-screen {
+    position: fixed; /* O usa fixed si quieres que siempre esté visible */
+    top: 0px; /* Distancia desde la parte superior */
+    left: 0px; /* Distancia desde la izquierda */
+    
+    width: 100%;
+    height: 100%;
+    background: #0d090d;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 2s ease-out, visibility 2s ease-out;
+    z-index: 1000;
+}
+
+
+/* Ocultar la pantalla de carga */
+.loading-screen.hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+
+
+
+
+
+
+
+.loader {
+    width: 60px;
+    height: 60px;
+    margin: auto;
+    position: relative;
+}
+
+.loader:before,
+.loader:after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    animation: pulsOut 1.8s ease-in-out infinite;
+    filter: drop-shadow(0 0 1rem rgba(214, 66, 255, 0.75));
+}
+
+.loader:before {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(214, 66, 255, 0.15);
+    animation-delay: 0.5s;
+}
+
+.loader:after {
+    width: 75%;
+    height: 75%;
+    background-color: rgba(214, 66, 255, 0.5);
+    top: 12.5%;
+    left: 12.5%;
+}
+
+@keyframes pulsOut {
+    0%, 100% { transform: scale(0); }
+    50% { transform: scale(1); }
+}
+
+.loading-text {
+    color: #e0e0e0;
+    margin-top: 20px;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.progress-bar {
+    width: 200px;
+    height: 4px;
+    background: rgba(214, 66, 255, 0.5);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-top: 20px;
+}
+
+.progress {
+    height: 100%;
+    background: rgb(214, 66, 255);
+    width: 0%;
+    transition: width 0.5s ease;
+}
+
+img{
+    width: 200px;
+    opacity: 1; /* Aparece gradualmente */
+    transition: opacity 0.5s ease-in-out;
+}
+
+img.hidden{
+    visibility: hidden;
+    width: 0;
+    height: 0;
+    opacity: 0; /* Inicialmente invisible */
+}
