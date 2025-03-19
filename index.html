@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Generación de Números</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
@@ -14,9 +13,27 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jstat/1.9.5/jstat.min.js"></script>
     <link rel="stylesheet" href="estilos.css">
+    <link rel="stylesheet" href="estilosSelect.css">
+
 </head>
 
 <body>
+
+<!-- Pantalla de carga -->
+<div class="loading-screen" id="loading-screen">
+
+    <img src="favicon.png" id="loading-img" class="hidden" alt="">
+    
+    <div>
+        <div class="loader"></div>
+        <p class="loading-text">Cargando</p>
+        <div class="progress-bar">
+            <div class="progress"></div>
+        </div>
+    </div>
+    
+</div>
+
 
 
 <div class="container">
