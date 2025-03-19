@@ -409,8 +409,10 @@ function graficarNumeros(numeros, media, li, ls) {
             
             responsive: true,  // Hace que la gráfica se ajuste al contenedor
             maintainAspectRatio: true, // Permite modificar la altura sin restricciones
-
-
+            animation: {
+                duration: 1500, // Duración de la animación
+                easing: "easeOutBounce" // Suavizado de la animación
+            },
             scales: {
                 x: {
                     title: { display: true, text: "Iteración", color: "#fff", font: { size: 14 } },
@@ -453,3 +455,63 @@ cambiarMetodo(); // Para cargar los valores iniciales al abrir la página
 generarTabla();
 
 
+
+
+document.getElementById("playButton").addEventListener("click", function() {
+    let audio = document.getElementById("audio");
+    audio.play(); // Reproducir el audio
+
+    // Crear la ventana emergente
+    let popup = document.createElement("div");
+    popup.style.position = "fixed";
+    popup.style.top = "50%";
+    popup.style.left = "50%";
+    popup.style.transform = "translate(-50%, -50%)";
+    popup.style.padding = "20px";
+    popup.style.background = "white";
+    popup.style.border = "2px solid black";
+    popup.style.boxShadow = "0px 0px 10px rgba(0,0,0,0.5)";
+    popup.style.zIndex = "1000";
+    
+    // Agregar la imagen dentro de la ventana emergente
+    let img = document.createElement("img");
+    img.src = "imagen.jpg";  // Reemplaza con la URL de tu imagen
+    img.style.width = "200px"; // Ajusta el tamaño según sea necesario
+    img.style.height = "auto";
+
+    popup.appendChild(img);
+    document.body.appendChild(popup);
+
+    // Eliminar la ventana emergente después de 2 segundos
+    setTimeout(function() {
+        popup.remove();
+    }, 2000);
+});
+
+
+
+
+
+const loadingText = document.querySelector('.loading-text');
+const progress = document.querySelector('.progress');
+let dots = '', progressWidth = 0;
+
+const textInterval = setInterval(() => {
+    loadingText.textContent = 'Cargando' + (dots = dots.length < 3 ? dots + '.' : '');
+}, 400);
+
+const progressInterval = setInterval(() => {
+    progress.style.width = (progressWidth += 2) + '%';
+    if (progressWidth >= 100) {
+        clearInterval(textInterval);
+        clearInterval(progressInterval);
+        loadingText.textContent = 'Pablo Agustín H. V.';
+        document.querySelector('.loader').style.display = 'none';
+        document.getElementById("loading-img").classList.remove("hidden");
+        
+        setTimeout(() => {
+            document.getElementById("loading-screen").classList.add("hidden");
+        }, 1000); // 2 segundos de espera
+
+    }
+}, 40);

@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generación de Números</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jstat/1.9.5/jstat.min.js"></script>
+    <link rel="stylesheet" href="estilos.css">
+    <link rel="stylesheet" href="estilosSelect.css">
+
+</head>
+
+<body>
+
+<!-- Pantalla de carga -->
+<div class="loading-screen" id="loading-screen">
+
+    <img src="favicon.png" id="loading-img" class="hidden" alt="">
+    
+    <div>
+        <div class="loader"></div>
+        <p class="loading-text">Cargando</p>
+        <div class="progress-bar">
+            <div class="progress"></div>
+        </div>
+    </div>
+    
+</div>
+
+
+
+<div class="container">
+    <h1>Generación de Números Pseudoaleatorios     
+        <img src="icons8-dado-90.svg" alt="Icono" width="54" height="54" id="playButton">
+        <audio id="audio" src="audio.mp3"></audio>
+    </h1>
+
+    <div class="selectContainer">
+        <label class="labelSelect" for="metodo">
+            Seleccione el método <i class="bi bi-collection-fill"></i> 
+        </label>
+        <select id="metodo" onchange="cambiarMetodo()">
+            <option value="congruencial">Congruencial Mixto</option>
+            <option value="productos">Productos Medios</option>
+            <option value="cuadrados">Cuadrados Medios</option>
+            <option value="multiplicador">Multiplicador Constante</option>
+            <option value="congruencialMult">Congruencial Multiplicativo</option>
+            <option value="fibonacci">fibonacci</option>
+        </select>
+    </div>
+
+    <div id="inputs"></div>
+    <button class="generarButton" onclick="generarTabla()">Generar Tabla <i class="bi bi-play-circle"></i></button>
+
+    <!-- Tabla de Cálculo de Números Pseudoaleatorios -->
+    <div class="tableContainer">
+        <table id="tabla">
+            <thead class="tabCab">
+                <tr id="tabla-header"></tr>
+            </thead>
+            <tbody class="tabBod"></tbody>
+        </table>
+    </div>
+
+    <h1>Grafico <i class="bi bi-graph-down"></i></h1>
+    <canvas id="graficoNumeros"></canvas>
+    
+
+    <!-- Prueba de Promedio (colapsable) -->
+    <details>
+        <summary><strong>Prueba de Promedio</strong></summary>
+        <div class="datosEstContainer">
+            <table class="tablePruebaPromedio datosEstTable">
+                <thead>
+                    <th>Media</th>
+                    <th>Alpha α</th>
+                    <th>Nivel de Confianza (1-α)</th>
+                    <th>Z</th>
+                    <th>LI</th>
+                    <th>LS</th>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </details>
+
+    <!-- Prueba de Varianza (colapsable) -->
+    <details>
+        <summary><strong>Prueba de Varianza</strong></summary>
+        <div class="datosEstContainer">
+            <table class="tablePruebaVarianza datosEstTable">
+                <thead>
+                    <th>Varianza</th>
+                    <th>Alpha α</th>
+                    <th>Nivel de Confianza (1-α/2)</th>
+                    <th>Chi Inferior</th>
+                    <th>Chi Superior</th>
+                    <th>LI</th>
+                    <th>LS</th>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </details>
+
+    <!-- Prueba de Forma (colapsable) -->
+    <details>
+        <summary><strong>Prueba de Forma</strong></summary>
+        <div class="datosEstContainer">
+            <table class="tablePruebaForma datosEstTable">
+                <thead>
+                    <th>Intervalo</th>
+                    <th>FO</th>
+                    <th>FE</th>
+                </thead>
+                <tbody></tbody>
+            </table>
+
+            <table class="tablePruebaFormaChi datosEstTable">
+                <thead>
+                    <th>C</th>
+                    <th>chi critico</th>
+                    <th>Uniformidad</th>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </details>
+
+    <!-- Prueba de Poker (colapsable) -->
+    <details>
+        <summary><strong>Prueba de Poker</strong></summary>
+        <div class="datosEstContainer">
+            <table class="tablePruebaPoker">
+                <thead>
+                    <tr>
+                        <th>Categoría</th>
+                        <th>Frecuencia Observada (FO)</th>
+                        <th>Frecuencia Esperada (FE)</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+
+            <table class="tablePruebaPokerResultados">
+                <thead>
+                    <tr>
+                        <th>C</th>
+                        <th>chi critico</th>
+                        <th>Uniformidad</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </details>
+
+    <!-- Prueba de Corridas (colapsable) -->
+    <details>
+        <summary><strong>Prueba de Corridas</strong></summary>
+        <div class="datosEstContainer">
+            <table class="tablePruebaCorridas">
+                <thead>
+                    <tr>
+                        <th>Corridas Observadas (h)</th>
+                        <th>E(h)</th>
+                        <th>Var(h)</th>
+                        <th>Z calculado</th>
+                        <th>Z crítico</th>
+                        <th>Conclusión</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </details>
+
+    <!-- Prueba de Corridas Media (colapsable) -->
+    <details>
+        <summary><strong>Prueba de Corridas (Arriba/Abajo de la Media)</strong></summary>
+        <div class="datosEstContainer">
+            <table class="tablePruebaCorridasMedia">
+                <thead>
+                    <tr>
+                        <th>Corridas (R)</th>
+                        <th>E(R)</th>
+                        <th>Var(R)</th>
+                        <th>Z calculado</th>
+                        <th>Z crítico</th>
+                        <th>Conclusión</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </details>
+        
+        
+    <!-- Prueba de Independencia de Series (colapsable) -->
+    <details>
+        <summary><strong>Prueba de Independencia de Series</strong></summary>
+        <div class="datosEstContainer">
+            <table class="tablePruebaSeries">
+                <thead>
+                    <tr>
+                        <th>Matriz Observada</th>
+                        <th>Pares Totales</th>
+                        <th>Frecuencia Esperada</th>
+                        <th>Chi-Cuadrado</th>
+                        <th>Grados de Libertad</th>
+                        <th>Chi Crítico</th>
+                        <th>Conclusión</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>                
+        </div>
+    </details>
+
+
+    <!-- Prueba de Independencia de Huecos (colapsable) -->
+
+    <details>
+        <summary><strong>Prueba de Independencia de Huecos</strong></summary>
+        <div class="datosEstContainer">
+            <table class="tablePruebaHuecos">
+                <thead>
+                    <tr>
+                        <th>Matriz de Huecos (Obs)</th>
+                        <th>Total de Huecos</th>
+                        <th>Frecuencias Esperadas</th>
+                        <th>Chi-Cuadrado</th>
+                        <th>Grados de Libertad</th>
+                        <th>Chi Crítico</th>
+                        <th>Conclusión</th>
+                        <th>Intervalo I</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </details>
+        
+    <!-- Prueba de Uniformidad de Kolmogorov (colapsable) -->
+
+    <details>
+        <summary><strong>Prueba de Uniformidad de Kolmogorov-Smirnov</strong></summary>
+        <div class="datosEstContainer">
+            <table class="tableUniformidadKS">
+                <thead>
+                    <tr>
+                        <th>D</th>
+                        <th>n</th>
+                        <th>D Crítico</th>
+                        <th>D+</th>
+                        <th>D-</th>
+                        <th>Conclusión</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </details>
+
+</div>
+
+<script src="js/genNumPsAle.js"></script>
+<script src="js/pruebasUnif.js"></script>
+<script src="js/java.js"></script>
+
+</body>
+</html>
